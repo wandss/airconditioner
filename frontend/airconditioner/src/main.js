@@ -5,10 +5,10 @@ import store from './store'
 import Buefy from 'buefy'
 import 'buefy/dist/buefy.css'
 import { library } from '@fortawesome/fontawesome-svg-core'
+import { faUserSecret, faAngleDown, faAngleUp } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import { faUserSecret } from '@fortawesome/free-solid-svg-icons'
 
-library.add(faUserSecret)
+library.add(faUserSecret, faAngleDown, faAngleUp)
 
 Vue.use(Buefy)
 
