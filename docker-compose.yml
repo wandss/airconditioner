@@ -1,0 +1,46 @@
+version: "2.3"
+services:
+
+  acback:
+    build: ./backend
+    container_name: acback
+    command: >
+      sh -c "python manage.py makemigrations &&
+             python manage.py migrate &&
+             python manage.py create_django_admin_user &&
+             coverage run manage.py test -v 3 --noinput &&
+             python manage.py runserver 0.0.0:8000"
+    volumes:
+     - ./backend/airconditioner:/airconditioner
+    ports:
+     - "8000:8000"
+    restart: unless-stopped
+    env_file:
+      - .env.dev
+    depends_on:
+     - acdb
+
+  acfront:
+    build: ./frontend
+    container_name: acfront
+    command: yarn serve
+    volumes:
+     - ./frontend/blog:/blog
+    ports:
+     - "8001:8080"
+    restart: unless-stopped
+    depends_on:
+     - acdb
+
+  acdb:
+    image: postgres
+    container_name: acdb
+    env_file:
+      - .env.dev
+    volumes:
+      - acapp-vol:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+        
+volumes:
+  acapp-vol:
