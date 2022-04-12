@@ -10,8 +10,9 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 
-import os
 from pathlib import Path
+
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -22,15 +23,15 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 #SECRET_KEY = 'django-insecure-el*&pe%3wlh&yual&lb7mlnua5hf#l$7e5z*#x9d+6+_2)#z^p'
-SECURITY = os.getenv('DJANGO_SECRET_KEY',
+SECRET_KEY = os.getenv('DJANGO_SECRET_KEY',
         'django-insecure-el*&pe%3wlh&yual&lb7mlnua5hf#l$7e5z*#x9d+6+_2)#z^p')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 #DEBUG = True
-DEBUG = os.getenv('DJANGO_DEBUG', True)
+DEBUG = os.getenv('DJANGO_DEBUG', False)
 
-ALLOWED_HOSTS = []
-ALLOWED_HOSTS = [os.getenv('DJANGO_ALLOWED_HOSTS', '')]
+#ALLOWED_HOSTS = []
+ALLOWED_HOSTS = os.getenv('DJANGO_ALLOWED_HOSTS', '127.0.0.1').split(',')
 
 
 # Application definition
@@ -42,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
     'control',
 ]
 
