@@ -55,6 +55,7 @@ class ControlProfile(models.Model):
             choices=Options.choices,
             default=Options.QUIET)
     swing = models.BooleanField(default=False)
+    #is_active = models.BooleanField(default=False)
    # settings = models.CharField(max_length=12,
    #         choices=Settings.choices)
 
