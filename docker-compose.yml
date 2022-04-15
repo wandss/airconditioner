@@ -17,30 +17,13 @@ services:
     restart: unless-stopped
     env_file:
       - .env.dev
-    depends_on:
-     - acdb
 
   acfront:
     build: ./frontend
     container_name: acfront
     command: yarn serve
     volumes:
-     - ./frontend/blog:/blog
+     - ./frontend/airconditioner:/airconditioner
     ports:
      - "8001:8080"
     restart: unless-stopped
-    depends_on:
-     - acdb
-
-  acdb:
-    image: postgres
-    container_name: acdb
-    env_file:
-      - .env.dev
-    volumes:
-      - acapp-vol:/var/lib/postgresql/data
-    ports:
-      - "5432:5432"
-        
-volumes:
-  acapp-vol:

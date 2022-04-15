@@ -83,14 +83,8 @@ WSGI_APPLICATION = 'airconditioner.wsgi.application'
 
 DATABASES = {
         'default': {
-            'ENGINE': 'django.db.backends.{}'.format(
-                os.getenv('DATABASE_ENGINE', 'sqlite3')
-            ),
-            'NAME': os.getenv('DATABASE_NAME', 'db.sqlite3' ),
-            'USER': os.getenv('DATBASE_USER', 'acdb'),
-            'PASSWORD': os.getenv('DATABASE_PASSWORD', 'youshouldchangethis'),
-            'HOST': os.getenv('DATABASE_HOST', 'ADDTHEDBCONTAINERNAME'),
-            'PORT': os.getenv('DATABASE_PORT', 5432),
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME':  'db.sqlite3',
         }
 }
 

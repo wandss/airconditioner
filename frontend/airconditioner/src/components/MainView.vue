@@ -17,16 +17,18 @@
           Background
         </h1>
         <h1 id="temperature" >
-          {{ temperature }} C
+          {{ $store.state.temperature }} C
         </h1>
         <section>
-          <b-button size="is-default" @click="temperature--"
-          :disabled="temperature==16?true:false">
+          <b-button size="is-default"
+          @click="$store.commit('decreaseTemperature', '')"
+          :disabled="$store.state.temperature==16?true:false">
           <fa-icon icon="angle-down" />
            Down 
           </b-button>
-          <b-button size="is-default" @click="temperature++"
-          :disabled="temperature==27?true:false"
+          <b-button size="is-default"
+          @click="$store.commit('increaseTemperature', '')"
+          :disabled="$store.state.temperature==30?true:false"
           >
            Up
           <fa-icon icon="angle-up" />
@@ -42,8 +44,9 @@
     <footer class="card-footer">
       <section class="card-footer-item">
        <b-field>
-         <b-switch type="is-success">
-           Power
+         <b-switch type="is-success" @input="$store.commit('setPower')"
+         :value="$store.state.power" >
+           Power 
          </b-switch>
        </b-field>
       </section>
@@ -71,9 +74,6 @@ export default {
     return {
       interval: null,
       time: null,
-      temperature: 16,
-      modes: ['Cool', 'Fan', 'Dry'],
-      activeMode: 0,
     }
   },
   beforeDestroy() {
