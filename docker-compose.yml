@@ -9,7 +9,7 @@ services:
              python manage.py migrate &&
              python manage.py create_django_admin_user &&
              coverage run manage.py test -v 3 --noinput &&
-             python manage.py runserver 0.0.0:8000"
+             python manage.py runserver 0.0.0.0:8000"
     volumes:
      - ./backend/airconditioner:/airconditioner
     ports:

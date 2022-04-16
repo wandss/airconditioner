@@ -1,19 +1,19 @@
 <template>
   <section>
     <b-sidebar
-      type="is-light"
-      :fullheight="fullheight"
-      :fullwidth="fullwidth"
-      :overlay="overlay"
-      :right="right"
-      v-model="open"
+      :type="$store.state.sideBar.type"
+      :fullheight="$store.state.sideBar.fullheight"
+      :fullwidth="$store.state.sideBar.fullwidth"
+      :overlay="$store.state.sideBar.overlay"
+      :right="$store.state.sideBar.right"
+      v-model="$store.state.sideBar.open"
     >
       <div class="p-1">
         <b-menu>
-          <b-menu-list :label="label">
+          <b-menu-list :label="$store.state.sideBar.label">
             <b-menu-item icon="information-outline" 
-              v-for="mode in
-              $store.state.modes" :label="mode">
+              v-for="item in
+              $store.state.sideBar.items" :label="item">
             </b-menu-item>
           </b-menu-list>
         </b-menu>
@@ -27,12 +27,6 @@ export default {
   name: 'SideBar',
   data() {
     return {
-      open: true,
-      overlay: true,
-      fullheight: true,
-      fullwidth: true,
-      right: true,
-      label: 'ADD TEXT HERE',
     };
   }
 };

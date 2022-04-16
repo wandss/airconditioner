@@ -44,7 +44,7 @@
     <footer class="card-footer">
       <section class="card-footer-item">
        <b-field>
-         <b-switch type="is-success" @input="$store.commit('setPower')"
+         <b-switch type="is-success" @input="handlePower"
          :value="$store.state.power" >
            Power 
          </b-switch>
@@ -61,8 +61,12 @@
     <footer class="card-footer">
       <section class="card-footer-item">
       <a href="#" class="card-footer-item">Save</a>
-      <a href="#" class="card-footer-item">Modes</a>
-      <a href="#" class="card-footer-item">Settings</a>
+      <a href="#" class="card-footer-item" 
+       @click="handleSideBar(modes)">
+        Modes
+      </a>
+      <a href="#" class="card-footer-item"
+       @click="handleSideBar(options)">Settings</a>
       </section>
     </footer>
   </div>
@@ -74,6 +78,9 @@ export default {
     return {
       interval: null,
       time: null,
+      modes: ['Cool', 'Fan', 'Dry', 'Auto'],
+      options: ['Quiet', 'Two Steps', 'Fast',
+                'Comfort', 'Single User'],
     }
   },
   beforeDestroy() {
@@ -89,6 +96,21 @@ export default {
         minute: 'numeric',
         second: 'numeric' }).format()
     }, 1000)
+  },
+  methods: {
+    handleSideBar(items){
+      this.$store.commit('setSideBar', 
+        {open: true,
+         label: 'Modes',
+         items: items,
+         })
+    },
+    handlePower() {
+      const power = this.$store.state.power?'off':'on' 
+      console.log(power)
+      this.$store.dispatch('sendCommand', {command: power})
+    }
+
   }
 }
 </script>

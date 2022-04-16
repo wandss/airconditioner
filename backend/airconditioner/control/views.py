@@ -26,9 +26,10 @@ class ControlAPIView(APIView):
 
     def put(self, request):
 
-        control_data = get_object_or_404(ControlProfile, 
-                id=request.data.get('id'))
-        command = f"irsend,SEND_ONCE,samsung,{control_data.__str__()}"
+        #control_data = get_object_or_404(ControlProfile, 
+        #        id=request.data.get('id'))
+        #command = f"irsend,SEND_ONCE,samsung,{control_data.__str__()}"
+        command = f"irsend,SEND_ONCE,samsung,{request.data.get('command')}"
         print(command)
         try:
             process_output = subprocess.run(command.split(','), stdout=subprocess.PIPE, 
