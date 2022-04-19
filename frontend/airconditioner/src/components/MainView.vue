@@ -17,18 +17,22 @@
           Background
         </h1>
         <h1 id="temperature" >
-          {{ $store.state.temperature }} C
+          {{ $store.state.control.temperature }} C
         </h1>
+        <p>
+          {{ $store.state.control.mode }} /
+          {{ $store.state.control.option }}
+        </p>
         <section>
           <b-button size="is-default"
           @click="$store.commit('decreaseTemperature', '')"
-          :disabled="$store.state.temperature==16?true:false">
+          :disabled="$store.state.control.temperature==16?true:false">
           <fa-icon icon="angle-down" />
-           Down 
+           Down
           </b-button>
           <b-button size="is-default"
           @click="$store.commit('increaseTemperature', '')"
-          :disabled="$store.state.temperature==30?true:false"
+          :disabled="$store.state.control.temperature==30?true:false"
           >
            Up
           <fa-icon icon="angle-up" />
@@ -46,13 +50,15 @@
        <b-field>
          <b-switch type="is-success" @input="handlePower"
          :value="$store.state.power" >
-           Power 
+           Power
          </b-switch>
        </b-field>
       </section>
       <section class="card-footer-item">
        <b-field>
-         <b-switch type="is-default">
+         <b-switch type="is-default" @input="handleSwing"
+          :value="$store.state.control.swing"
+         >
            Swing
          </b-switch>
        </b-field>
@@ -61,12 +67,12 @@
     <footer class="card-footer">
       <section class="card-footer-item">
       <a href="#" class="card-footer-item">Save</a>
-      <a href="#" class="card-footer-item" 
-       @click="handleSideBar(modes)">
+      <a href="#" class="card-footer-item"
+       @click="handleSideBar($store.state.modes, 'Modes')">
         Modes
       </a>
       <a href="#" class="card-footer-item"
-       @click="handleSideBar(options)">Settings</a>
+       @click="handleSideBar($store.state.options, 'Options')">Options</a>
       </section>
     </footer>
   </div>
@@ -74,41 +80,46 @@
 <script>
 export default {
   name: 'MainVIew',
-  data() {
+  data () {
     return {
       interval: null,
-      time: null,
-      modes: ['Cool', 'Fan', 'Dry', 'Auto'],
-      options: ['Quiet', 'Two Steps', 'Fast',
-                'Comfort', 'Single User'],
+      time: null
     }
   },
-  beforeDestroy() {
+  beforeDestroy () {
     clearInterval(this.inverval)
   },
-  created() {
-     // update the time every second
+  created () {
+    // update the time every second
     this.interval = setInterval(() => {
       // Concise way to format time according to system locale.
       // In my case this returns "3:48:00 am"
       this.time = Intl.DateTimeFormat(navigator.language, {
         hour: 'numeric',
         minute: 'numeric',
-        second: 'numeric' }).format()
+        second: 'numeric'
+      }).format()
     }, 1000)
   },
   methods: {
-    handleSideBar(items){
-      this.$store.commit('setSideBar', 
-        {open: true,
-         label: 'Modes',
-         items: items,
-         })
+    handleSideBar (items, label) {
+      this.$store.commit('setSideBar',
+        {
+          open: true,
+          label: label,
+          items: items
+        })
     },
-    handlePower() {
-      const power = this.$store.state.power?'off':'on' 
-      console.log(power)
-      this.$store.dispatch('sendCommand', {command: power})
+    handlePower () {
+      const power = this.$store.state.power ? 'off' : 'on'
+      this.$store.dispatch('sendCommand', { command: power })
+    },
+    handleSwing () {
+      // const swing = this.$store.state.power ? 'Swingoff' : 'Swingon'
+      this.$store.commit('setControl',
+        {
+          swing: !this.$store.state.control.swing
+        })
     }
 
   }

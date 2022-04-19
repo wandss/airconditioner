@@ -11,9 +11,10 @@
       <div class="p-1">
         <b-menu>
           <b-menu-list :label="$store.state.sideBar.label">
-            <b-menu-item icon="information-outline" 
-              v-for="item in
-              $store.state.sideBar.items" :label="item">
+            <b-menu-item icon="information-outline"
+              v-for="item in $store.state.sideBar.items"
+              :key="item" @click="handleChange(item)"
+              :label="item">
             </b-menu-item>
           </b-menu-list>
         </b-menu>
@@ -25,11 +26,24 @@
 <script>
 export default {
   name: 'SideBar',
-  data() {
+  data () {
     return {
-    };
+    }
+  },
+  methods: {
+    handleChange (item) {
+    // USE Objects.indexOf with state.options
+    // or state.modes instead of label
+      if (this.$store.state.sideBar.label === 'Modes') {
+        this.$store.commit('setControl',
+          { mode: item })
+      } else {
+        this.$store.commit('setControl',
+          { option: item })
+      }
+    }
   }
-};
+}
 </script>
 
 <style>

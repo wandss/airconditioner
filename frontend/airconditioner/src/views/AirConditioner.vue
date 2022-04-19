@@ -9,9 +9,6 @@ import MainView from '@/components/MainView.vue'
 import SideBar from '@/components/SideBar.vue'
 export default {
   name: 'AirConditioner',
-  components: {MainView, SideBar},
-  mounted() {
-    this.$store.dispatch('fetchProfiles')
-  }
+  components: { MainView, SideBar }
 }
 </script>

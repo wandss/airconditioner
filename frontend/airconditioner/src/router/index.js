@@ -23,7 +23,7 @@ const routes = [
     path: '/ac',
     name: 'ac',
     component: AirConditioner
-  },
+  }
 ]
 
 const router = new VueRouter({
