@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import HomeView from '../views/HomeView.vue'
 import AirConditioner from '../views/AirConditioner.vue'
 
 Vue.use(VueRouter)
@@ -8,8 +7,8 @@ Vue.use(VueRouter)
 const routes = [
   {
     path: '/',
-    name: 'home',
-    component: HomeView
+    name: 'ac',
+    component: AirConditioner
   },
   {
     path: '/about',
@@ -19,11 +18,6 @@ const routes = [
     // which is lazy-loaded when the route is visited.
     component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
   },
-  {
-    path: '/ac',
-    name: 'ac',
-    component: AirConditioner
-  }
 ]
 
 const router = new VueRouter({

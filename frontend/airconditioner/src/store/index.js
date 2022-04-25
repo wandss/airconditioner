@@ -21,6 +21,7 @@ export default new Vuex.Store({
     },
     profiles: [],
     control: {
+      power: false,
       temperature: 16,
       mode: 'Cool',
       option: 'Quiet',
@@ -48,12 +49,17 @@ export default new Vuex.Store({
   },
   actions: {
     sendCommand (context, payload) {
-      axios.put('http://billie:8000/api/v1/control/', payload)
+      const server = process.env.VUE_APP_API_SERVER_URL
+      const api = process.env.VUE_APP_API_BASE
+      const baseUrl = server + api
+      // axios.put('http://billie:8000/api/v1/control/', payload)
+      axios.put(baseUrl + '/control/', payload)
         .then(resp => {
-          console.log(resp.data)
           context.commit('setPower')
         })
-        .catch(error => console.log(error))
+        .catch(error => {
+          console.log(error)
+        })
     }
     /*
     fetchPosts(context) {

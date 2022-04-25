@@ -115,7 +115,8 @@ export default {
       this.$store.dispatch('sendCommand', { command: power })
     },
     handleSwing () {
-      // const swing = this.$store.state.power ? 'Swingoff' : 'Swingon'
+      const swing = { command: this.$store.state.control.swing ? 'swingOff' : 'swingOn' }
+      this.$store.dispatch('sendCommand', swing)
       this.$store.commit('setControl',
         {
           swing: !this.$store.state.control.swing
