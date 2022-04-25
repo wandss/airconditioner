@@ -4,7 +4,9 @@ services:
   acfront:
     build: ./frontend
     container_name: acfront
-    command: yarn build
+    command: >
+      sh -c "yarn run lint -- --fix && \
+             yarn build"
     volumes:
      - ./frontend/airconditioner:/airconditioner
     ports:
