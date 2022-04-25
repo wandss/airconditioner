@@ -34,8 +34,7 @@ class ControlAPIView(APIView):
         try:
             process_output = subprocess.run(command.split(','), stdout=subprocess.PIPE, 
                     stderr=subprocess.PIPE, text=True)
-            stdout, stderr = process_output.communicate()
-            response_data = stdout
+            response_data = process_output.stdout
             status_code = status.HTTP_204_NO_CONTENT
         except Exception as e:
             response_data = str(e)
