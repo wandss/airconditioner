@@ -87,12 +87,12 @@ export default new Vuex.Store({
       // axios.put('http://billie:8000/api/v1/control/', payload)
       axios.put(baseUrl + '/control/', payload)
         .then(resp => {
-          context.commit('setSwing')
+            context.commit('setSwing') //REMOVE THIS
         })
         .catch(error => {
           console.log(error)
           console.log(payload)
-          //context.commit('decreaseTemperature')
+          // context.commit('decreaseTemperature')
         })
     }
 

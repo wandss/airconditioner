@@ -121,12 +121,11 @@ export default {
     handleTemperature (action) {
       if (action === 'increase') {
         this.$store.commit('increaseTemperature')
-      }
-      else {
+      } else {
         this.$store.commit('decreaseTemperature')
       }
       this.$store.dispatch('updateControl',
-        {"command": this.$store.getters.control})
+        { command: this.$store.getters.control })
     }
 
   }
