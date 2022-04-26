@@ -9,6 +9,7 @@ export default new Vuex.Store({
     options: ['Quiet', 'Two Steps', 'Fast', 'Comfort', 'Single User'],
     modes: ['Cool', 'Auto', 'Dry', 'Fan'],
     power: false,
+    swing: false,
     sideBar: {
       open: false,
       overlay: true,
@@ -21,14 +22,16 @@ export default new Vuex.Store({
     },
     profiles: [],
     control: {
-      power: false,
       temperature: 16,
       mode: 'Cool',
-      option: 'Quiet',
-      swing: false
+      option: 'Quiet'
     }
   },
   getters: {
+    control (state) {
+      const control = state.control.mode + state.control.option + state.control.temperature
+      return control[0].toLocaleLowerCase() + control.slice(1, control.length)
+    }
   },
   mutations: {
     increaseTemperature (state, payload) {
@@ -40,6 +43,9 @@ export default new Vuex.Store({
     setPower (state, payload) {
       state.power = !state.power
     },
+    setSwing (state, payload) {
+      state.swing = !state.swing
+    },
     setSideBar (state, payload) {
       Object.assign(state.sideBar, payload)
     },
@@ -48,7 +54,7 @@ export default new Vuex.Store({
     }
   },
   actions: {
-    sendCommand (context, payload) {
+    setPower (context, payload) {
       const server = process.env.VUE_APP_API_SERVER_URL
       const api = process.env.VUE_APP_API_BASE
       const baseUrl = server + api
@@ -60,7 +66,36 @@ export default new Vuex.Store({
         .catch(error => {
           console.log(error)
         })
+    },
+    setSwing (context, payload) {
+      const server = process.env.VUE_APP_API_SERVER_URL
+      const api = process.env.VUE_APP_API_BASE
+      const baseUrl = server + api
+      // axios.put('http://billie:8000/api/v1/control/', payload)
+      axios.put(baseUrl + '/control/', payload)
+        .then(resp => {
+          context.commit('setSwing')
+        })
+        .catch(error => {
+          console.log(error)
+        })
+    },
+    updateControl (context, payload) {
+      const server = process.env.VUE_APP_API_SERVER_URL
+      const api = process.env.VUE_APP_API_BASE
+      const baseUrl = server + api
+      // axios.put('http://billie:8000/api/v1/control/', payload)
+      axios.put(baseUrl + '/control/', payload)
+        .then(resp => {
+          context.commit('setSwing')
+        })
+        .catch(error => {
+          console.log(error)
+          console.log(payload)
+          //context.commit('decreaseTemperature')
+        })
     }
+
     /*
     fetchPosts(context) {
        //TODO: pass the ordering Query string, dynamically through parameters

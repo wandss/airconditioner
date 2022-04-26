@@ -2,7 +2,7 @@
   <div class="card">
     <header class="card-header">
       <p class="card-header-title">
-        AIR Conditioner Name Here
+        AIR Conditioner Name Here {{ $store.getters.control }}
       </p>
       <button class="card-header-icon" aria-label="more options">
         <span class="icon">
@@ -25,13 +25,13 @@
         </p>
         <section>
           <b-button size="is-default"
-          @click="$store.commit('decreaseTemperature', '')"
+          @click="handleTemperature('decrease')"
           :disabled="$store.state.control.temperature==16?true:false">
           <fa-icon icon="angle-down" />
            Down
           </b-button>
           <b-button size="is-default"
-          @click="$store.commit('increaseTemperature', '')"
+          @click="handleTemperature('increase')"
           :disabled="$store.state.control.temperature==30?true:false"
           >
            Up
@@ -57,7 +57,7 @@
       <section class="card-footer-item">
        <b-field>
          <b-switch type="is-default" @input="handleSwing"
-          :value="$store.state.control.swing"
+          :value="$store.state.swing"
          >
            Swing
          </b-switch>
@@ -112,15 +112,21 @@ export default {
     },
     handlePower () {
       const power = this.$store.state.power ? 'off' : 'on'
-      this.$store.dispatch('sendCommand', { command: power })
+      this.$store.dispatch('setPower', { command: power })
     },
     handleSwing () {
-      const swing = { command: this.$store.state.control.swing ? 'swingOff' : 'swingOn' }
-      this.$store.dispatch('sendCommand', swing)
-      this.$store.commit('setControl',
-        {
-          swing: !this.$store.state.control.swing
-        })
+      const swing = { command: this.$store.state.swing ? 'swingOff' : 'swingOn' }
+      this.$store.dispatch('setSwing', swing)
+    },
+    handleTemperature (action) {
+      if (action === 'increase') {
+        this.$store.commit('increaseTemperature')
+      }
+      else {
+        this.$store.commit('decreaseTemperature')
+      }
+      this.$store.dispatch('updateControl',
+        {"command": this.$store.getters.control})
     }
 
   }
