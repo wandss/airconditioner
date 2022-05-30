@@ -2,7 +2,7 @@
   <div class="card">
     <header class="card-header">
       <p class="card-header-title">
-        AIR Conditioner Name Here {{ $store.getters.control }}
+        Samsung: {{ $store.getters.control }}
       </p>
       <button class="card-header-icon" aria-label="more options">
         <span class="icon">
@@ -25,13 +25,13 @@
         </p>
         <section>
           <b-button size="is-default"
-          @click="handleTemperature('decrease')"
+          @click="handleControl('decreaseTemperature')"
           :disabled="$store.state.control.temperature==16?true:false">
           <fa-icon icon="angle-down" />
            Down
           </b-button>
           <b-button size="is-default"
-          @click="handleTemperature('increase')"
+          @click="handleControl('increaseTemperature')"
           :disabled="$store.state.control.temperature==30?true:false"
           >
            Up
@@ -56,8 +56,8 @@
       </section>
       <section class="card-footer-item">
        <b-field>
-         <b-switch type="is-default" @input="handleSwing"
-          :value="$store.state.swing"
+         <b-switch type="is-default" @input="handleControl('swing')"
+          :value="$store.state.control.swing"
          >
            Swing
          </b-switch>
@@ -114,16 +114,16 @@ export default {
       const power = this.$store.state.power ? 'off' : 'on'
       this.$store.dispatch('setPower', { command: power })
     },
-    handleSwing () {
-      const swing = { command: this.$store.state.swing ? 'swingOff' : 'swingOn' }
-      this.$store.dispatch('setSwing', swing)
-    },
-    handleTemperature (action) {
-      if (action === 'increase') {
-        this.$store.commit('increaseTemperature')
-      } else {
-        this.$store.commit('decreaseTemperature')
+    handleControl (action) {
+      const control = Object.assign({}, this.$store.state.control)
+      if (action === 'increaseTemperature') {
+        control.temperature++
+      } else if (action === 'decreaseTemperature') {
+        control.temperature--
+      } else if (action === 'swing') {
+        control.swing = !control.swing
       }
+      this.$store.commit('setControl', control)
       this.$store.dispatch('updateControl',
         { command: this.$store.getters.control })
     }

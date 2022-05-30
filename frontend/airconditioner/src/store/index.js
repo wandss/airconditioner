@@ -9,7 +9,6 @@ export default new Vuex.Store({
     options: ['Quiet', 'Two Steps', 'Fast', 'Comfort', 'Single User'],
     modes: ['Cool', 'Auto', 'Dry', 'Fan'],
     power: false,
-    swing: false,
     sideBar: {
       open: false,
       overlay: true,
@@ -24,27 +23,21 @@ export default new Vuex.Store({
     control: {
       temperature: 16,
       mode: 'Cool',
-      option: 'Quiet'
+      option: 'Quiet',
+      swing: false
     }
   },
   getters: {
     control (state) {
-      const control = state.control.mode + state.control.option + state.control.temperature
+      let control = state.control.mode + state.control.option + state.control.temperature
+      const swing = state.control.swing ? 'swingOn' : 'swingOff'
+      control = control + swing
       return control[0].toLocaleLowerCase() + control.slice(1, control.length)
     }
   },
   mutations: {
-    increaseTemperature (state, payload) {
-      Object.assign({ temperature: state.control.temperature++ }, state.control)
-    },
-    decreaseTemperature (state, payload) {
-      Object.assign({ temperature: state.control.temperature-- }, state.control)
-    },
     setPower (state, payload) {
       state.power = !state.power
-    },
-    setSwing (state, payload) {
-      state.swing = !state.swing
     },
     setSideBar (state, payload) {
       Object.assign(state.sideBar, payload)
@@ -85,9 +78,10 @@ export default new Vuex.Store({
       const api = process.env.VUE_APP_API_BASE
       const baseUrl = server + api
       // axios.put('http://billie:8000/api/v1/control/', payload)
+      console.log(payload)
       axios.put(baseUrl + '/control/', payload)
         .then(resp => {
-            context.commit('setSwing') //REMOVE THIS
+          context.commit('setSwing') // REMOVE THIS
         })
         .catch(error => {
           console.log(error)
