@@ -38,7 +38,7 @@ export default new Vuex.Store({
       return control[0].toLocaleLowerCase() + control.slice(1, control.length)
     },
     roomTemp (state) {
-      return state.toLocaleString()
+      return state.roomTemperature.toLocaleString()
     }
   },
   mutations: {
