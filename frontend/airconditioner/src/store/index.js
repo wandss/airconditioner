@@ -6,6 +6,8 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
+    clockInterval: null,
+    clock: '',
     options: ['Quiet', 'Two Steps', 'Fast', 'Comfort', 'Single User'],
     modes: ['Cool', 'Auto', 'Dry', 'Fan'],
     power: false,
@@ -25,7 +27,8 @@ export default new Vuex.Store({
       mode: 'Cool',
       option: 'Quiet',
       swing: false
-    }
+    },
+    roomTemperature: null
   },
   getters: {
     control (state) {
@@ -36,6 +39,15 @@ export default new Vuex.Store({
     }
   },
   mutations: {
+    setClock (state, payload) {
+      state.clockInterval = setInterval(() => {
+        state.clock = Intl.DateTimeFormat(navigator.language, {
+          hour: 'numeric',
+          minute: 'numeric',
+          second: 'numeric'
+        }).format()
+      }, 1000)
+    },
     setPower (state, payload) {
       state.power = !state.power
     },
@@ -44,9 +56,18 @@ export default new Vuex.Store({
     },
     setControl (state, payload) {
       Object.assign(state.control, payload)
+    },
+    setRoomTemperature (state, payload) {
+      state.roomTemperature = payload
     }
   },
   actions: {
+    startClock (context) {
+      context.commit('setClock')
+    },
+    stopClock (context) {
+      clearInterval(context.state.clockInterval)
+    },
     setPower (context, payload) {
       const server = process.env.VUE_APP_API_SERVER_URL
       const api = process.env.VUE_APP_API_BASE
@@ -87,6 +108,19 @@ export default new Vuex.Store({
           console.log(error)
           console.log(payload)
           // context.commit('decreaseTemperature')
+        })
+    },
+    fetchRoomTemperature (context, payload) {
+      const server = process.env.VUE_APP_API_SERVER_URL
+      const api = process.env.VUE_APP_API_BASE
+      const baseUrl = server + api
+      axios.get(baseUrl + '/temperature/')
+        .then(resp => {
+          context.commit('setRoomTemperature', resp.data.room_temperature)
+        })
+        .catch(error => {
+          console.log(error)
+          clearInterval(payload)
         })
     }
 

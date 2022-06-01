@@ -13,9 +13,9 @@
     </header>
     <div class="card-content">
       <div class="content" id="background">
-        <h1 id="background">
-          Background
-        </h1>
+        <h3 id="background" v-if="$store.state.roomTemperature !== null">
+          Room Temperature: {{$store.state.roomTemperature}} C
+        </h3>
         <h1 id="temperature" >
           {{ $store.state.control.temperature }} C
         </h1>
@@ -41,7 +41,7 @@
         <br>
         <br>
         <time datetime="2016-1-1">
-          {{ time }}
+          {{ $store.state.clock }}
         </time>
       </div>
     </div>
@@ -82,24 +82,19 @@ export default {
   name: 'MainVIew',
   data () {
     return {
-      interval: null,
-      time: null
+      roomTemperatureInterval: null
     }
   },
   beforeDestroy () {
-    clearInterval(this.inverval)
+    this.$store.dispatch('stopClock')
+    clearInterval(this.roomTemperatureInterval)
   },
   created () {
-    // update the time every second
-    this.interval = setInterval(() => {
-      // Concise way to format time according to system locale.
-      // In my case this returns "3:48:00 am"
-      this.time = Intl.DateTimeFormat(navigator.language, {
-        hour: 'numeric',
-        minute: 'numeric',
-        second: 'numeric'
-      }).format()
-    }, 1000)
+    this.$store.dispatch('startClock')
+    this.roomTemperatureInterval = setInterval(() => {
+      this.$store.dispatch('fetchRoomTemperature', this.roomTemperatureInterval)
+    }, 10000)
+    this.$store.dispatch('startClock')
   },
   methods: {
     handleSideBar (items, label) {
