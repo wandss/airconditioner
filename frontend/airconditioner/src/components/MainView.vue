@@ -14,7 +14,7 @@
     <div class="card-content">
       <div class="content" id="background">
         <h3 id="background" v-if="$store.state.roomTemperature !== null">
-          Room Temperature: {{$store.state.roomTemperature}} C
+          Room: {{$store.getters.roomTemp}} C
         </h3>
         <h1 id="temperature" >
           {{ $store.state.control.temperature }} C
@@ -91,9 +91,10 @@ export default {
   },
   created () {
     this.$store.dispatch('startClock')
+    this.$store.dispatch('fetchRoomTemperature')
     this.roomTemperatureInterval = setInterval(() => {
       this.$store.dispatch('fetchRoomTemperature', this.roomTemperatureInterval)
-    }, 10000)
+    }, 5000)
     this.$store.dispatch('startClock')
   },
   methods: {

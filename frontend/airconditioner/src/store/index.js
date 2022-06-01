@@ -36,6 +36,9 @@ export default new Vuex.Store({
       const swing = state.control.swing ? 'swingOn' : 'swingOff'
       control = control + swing
       return control[0].toLocaleLowerCase() + control.slice(1, control.length)
+    },
+    roomTemp (state) {
+      return state.toLocaleString()
     }
   },
   mutations: {
@@ -119,8 +122,11 @@ export default new Vuex.Store({
           context.commit('setRoomTemperature', resp.data.room_temperature)
         })
         .catch(error => {
-          console.log(error)
-          clearInterval(payload)
+          console.log(error.response)
+
+          if (payload !== undefined && error.response.status === 404) {
+            clearInterval(payload)
+          }
         })
     }
 
