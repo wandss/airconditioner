@@ -5,10 +5,12 @@
         Samsung: {{ $store.getters.control }}
       </p>
       <button class="card-header-icon" aria-label="more options">
+        <!--
         <span class="icon">
           <i class="fas fa-angle-down" aria-hidden="true"></i>
           <fa-icon icon="angle-down" />
         </span>
+        !-->
       </button>
     </header>
     <div class="card-content">
