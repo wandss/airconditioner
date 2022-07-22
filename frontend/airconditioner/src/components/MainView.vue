@@ -94,6 +94,7 @@ export default {
   created () {
     this.$store.dispatch('startClock')
     this.$store.dispatch('fetchRoomTemperature')
+    this.$store.dispatch('fetchPower')
     this.roomTemperatureInterval = setInterval(() => {
       this.$store.dispatch('fetchRoomTemperature', this.roomTemperatureInterval)
     }, 5000)

@@ -54,6 +54,9 @@ export default new Vuex.Store({
     setPower (state, payload) {
       state.power = !state.power
     },
+    setPowerInitialState (state, payload) {
+      state.power = payload
+    },
     setSideBar (state, payload) {
       Object.assign(state.sideBar, payload)
     },
@@ -70,6 +73,20 @@ export default new Vuex.Store({
     },
     stopClock (context) {
       clearInterval(context.state.clockInterval)
+    },
+    fetchPower (context, payload) {
+      const server = process.env.VUE_APP_API_SERVER_URL
+      const api = process.env.VUE_APP_API_BASE
+      const baseUrl = server + api
+
+      axios.get(baseUrl + '/control/status')
+        .then(resp => {
+          console.log(resp.data)
+          context.commit('setPowerInitialState', resp.data.ac_status)
+        })
+        .catch(error => {
+          console.log(error)
+        })
     },
     setPower (context, payload) {
       const server = process.env.VUE_APP_API_SERVER_URL
