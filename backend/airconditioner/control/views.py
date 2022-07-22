@@ -4,14 +4,14 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 
-from .models import ControlProfile
-from .serializers import ControlProfileSerializer
+from .models import ControlProfile, AirConditionerStatus
+from .serializers import (ControlProfileSerializer,
+                          AirConditionerStatusSerializer)
 
 import subprocess
 
 
 class ControlProfileListAPIView(ListAPIView):
-
     queryset = ControlProfile.objects.all()
     serializer_class = ControlProfileSerializer
 
@@ -21,6 +21,18 @@ class ControlProfileRetrieveAPIView(RetrieveAPIView):
     serializer_class = ControlProfileSerializer
     lookup_field = 'id'
 
+class AirConditionerStatusRetrieveAPIView(APIView):
+
+    def get(self, request):
+        ac_status = AirConditionerStatus.objects.get_or_create()[0]
+        status_code = status.HTTP_200_OK
+        response_data = {"ac_status": ac_status.status}
+
+        if not ac_status:
+            status_code = status.HTTP_404_NOT_FOUND
+
+        return  Response(data=response_data, status=status_code)
+
 
 class ControlAPIView(APIView):
 
@@ -29,8 +41,18 @@ class ControlAPIView(APIView):
         #control_data = get_object_or_404(ControlProfile, 
         #        id=request.data.get('id'))
         #command = f"irsend,SEND_ONCE,samsung,{control_data.__str__()}"
+        if request.data.get('command') == 'on':
+            ac_status = AirConditionerStatus.objects.get_or_create()[0]
+            ac_status.status = not ac_status.status
+            ac_status.save()
+
+        if request.data.get('command') == 'off':
+            ac_status = AirConditionerStatus.objects.get_or_create()[0]
+            ac_status.status = False
+            ac_status.save()
+
         command = f"irsend,SEND_ONCE,samsung,{request.data.get('command')}"
-        print(command)
+
         try:
             process_output = subprocess.run(command.split(','), stdout=subprocess.PIPE, 
                     stderr=subprocess.PIPE, text=True)

@@ -54,7 +54,7 @@ class ControlProfile(models.Model):
     option = models.CharField(max_length=12,
             choices=Options.choices,
             default=Options.QUIET)
-    swing = models.BooleanField(default=False)
+    swing = models.BooleanField(default=True)
     #is_active = models.BooleanField(default=False)
    # settings = models.CharField(max_length=12,
    #         choices=Settings.choices)
@@ -77,6 +77,13 @@ class ControlProfile(models.Model):
 
     class Meta:
         unique_together = ['temperature', 'mode', 'option', 'swing']
+
+class AirConditionerStatus(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid4, editable=False)
+    status = models.BooleanField(default=False)
+
+    def __str__(self):
+        return str(self.status)
 
 #TODO: Store the profilename when creating the object or
 # return the profilename on the restapi as a custom field???
